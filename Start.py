@@ -1,0 +1,3 @@
+a='lk;jlfdrdytfuyiuyoipoiuytrewe5765876983y2uog3hvjh21jhi2ytyuft2c1gj2bjl1n3ji2y1qwertyuiopasdfghjklasdfghjkl'
+b='jlfdrdytfuyiuyoipoiuytrewe5765876983y2uog3hvjh21jhi2ytyuft2c1gj2bjl1n3ji2y1qwertyuiopasdfghjklasdfghjkl'
+print(a==b)
