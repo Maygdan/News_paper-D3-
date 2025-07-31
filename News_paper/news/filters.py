@@ -1,5 +1,7 @@
 from django_filters import FilterSet
-from .models import Post,Category
+from .models import Post
+import django_filters
+from django import forms
 
 
 class PostFilter(FilterSet):
@@ -8,11 +10,6 @@ class PostFilter(FilterSet):
         fields={
             'title':['icontains'],
             'data_time':['gt'],
+            'category':['exact']
                 }
         
-class CategoryFilter(FilterSet):
-    class Meta:
-        model=Category
-        fields={
-            'name':['icontains']
-                }

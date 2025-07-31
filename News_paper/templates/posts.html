@@ -13,7 +13,7 @@ Posts
    </form>
 
 
-{% if post %}
+{% if posts %}
 <table>
     <tr>
         <td>Автор</td>
@@ -21,17 +21,16 @@ Posts
         <td>Превью</td>
         <td>Дата создания</td>
         <td>Категория</td>
-        <td> Вид</td>
+
     </tr>
 
-{% for pos in object_list %}
+{% for posts in object_list %}
 <tr>
     <td>{{ posts.postUser }}</td>
     <td>{{ posts.title }}</td>
     <td>{{ posts.text|truncatechars:20 }}</td>
     <td>{{ posts.data_time|date:'d M Y'}}</td>
     <td>{{posts.category.name}}</td>
-    <td>{{posts.choose}}</td>
 
 </tr>
 {% endfor %} 

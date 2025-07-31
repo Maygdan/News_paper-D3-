@@ -34,16 +34,15 @@ class Category(models.Model):
 class Post(models.Model):
     author=models.ForeignKey(Author,on_delete=models.CASCADE,related_name='Author')
     postUser=models.ForeignKey(User,on_delete=models.CASCADE,related_name='User')
-    pos='article'
-    new='news'
+    
     Choises=(
-        (pos,'статья'),
-        (new,'новость')
+        ('article','статья'),
+        ('new','новость')
     )
     rating=models.IntegerField(default=0)
     data_time=models.DateTimeField(auto_now_add=True)
-    choose=models.CharField(max_length=10,choices=Choises,default=pos)
-    category=models.ForeignKey(Category,on_delete=models.CASCADE,related_name='category',)
+    choose=models.CharField(max_length=10,choices=Choises,default='new')
+    category=models.ManyToManyField(Category,through='Post_Category')
     title=models.CharField(max_length=32,validators=[MinLengthValidator(2)])
     text=models.TextField(validators=[MinLengthValidator(10)])
 
@@ -55,20 +54,19 @@ class Post(models.Model):
         self.rating -=1
         self.save()
     
-    def preview(self):
-        return str(self.text[:20]) + '...'
-    
     def __str__(self):
-        return f'{self.title}'
+        return f'{self.title}: {self.text[:20]} ...'
     
     def save(self, *args, **kwargs):
         self.text = censor_text(self.text)
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('post', args=[str(self.id)])     # type: ignore
+        return reverse('post_detail', args=[str(self.id)])     # type: ignore
     
-    
+class Post_Category(models.Model):
+    MP=models.ForeignKey(Post,on_delete=models.CASCADE)
+    MC=models.ForeignKey(Category,on_delete=models.CASCADE)
 
 class Comment(models.Model):
     rating=models.IntegerField(default=0)
