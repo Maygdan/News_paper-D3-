@@ -1,5 +1,6 @@
 from django.views.generic import (ListView, DetailView,
 CreateView,UpdateView,DeleteView)
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from .forms import PostForm
 from .models import Post
 from datetime import datetime as dt
@@ -23,12 +24,14 @@ class AllView(ListView):
         context = super().get_context_data(**kwargs)
         context['filterset'] = self.filterset
         return context
-class PostsUpdate(UpdateView):
+class PostsUpdate(PermissionRequiredMixin,UpdateView):
+    permission_required = ('news.change_post',)
     form_class = PostForm
     model = Post
     template_name = 'posts_edit.html'
     
-class NewsCreate(CreateView):
+class NewsCreate(PermissionRequiredMixin,CreateView):
+    permission_required = ('news.add_new',)
     form_class = PostForm
     model = Post
     template_name = 'news_create.html'
@@ -38,7 +41,8 @@ class NewsCreate(CreateView):
         a.choose = 'news'
         return super().form_valid(form)
 
-class ArticleCreate(CreateView):
+class ArticleCreate(PermissionRequiredMixin,CreateView):
+    permission_required = ('news.add_article',)
     form_class = PostForm
     model = Post
     template_name = 'article_create.html'
@@ -50,13 +54,14 @@ class ArticleCreate(CreateView):
     
 
 
-class PostsDelete(DeleteView):
+class PostsDelete(PermissionRequiredMixin,DeleteView):
+    permission_required = ('news.delete_post',)
     model=Post
     template_name='posts_delete.html'
     success_url=reverse_lazy('posts_list')
 
     
-class PostsDetail(DetailView):
+class PostsDetail(PermissionRequiredMixin,DetailView):
     model=Post
     template_name='post.html'
     context_object_name='post'

@@ -23,14 +23,26 @@ Posts
         <td>Категория</td>
 
     </tr>
-
-{% for posts in object_list %}
+{% if perms.news.change_post or perms.news.delete_post %}
+                <td>Действия</td>
+                {% endif %}
+{% for posts in posts %}
 <tr>
     <td>{{ posts.postUser }}</td>
     <td>{{ posts.title }}</td>
     <td>{{ posts.text|truncatechars:20 }}</td>
     <td>{{ posts.data_time|date:'d M Y'}}</td>
     <td>{{posts.category.name}}</td>
+
+                <td>
+                    {# А здесь доступ для каждой ссылки теперь будем проверять отдельно #}
+                    {% if perms.news.change_post %}
+                    <a href="{% url 'product_update' pk=product.id %}">Изменить</a>
+                    {% endif %}
+                    {% if perms.news.delete_post %}
+                    <a href="{% url 'product_delete' product.id %}">Удалить</a>
+                    {% endif %}
+                </td>
 
 </tr>
 {% endfor %} 
